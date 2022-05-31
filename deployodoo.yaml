@@ -76,7 +76,7 @@ spec:
     tier: frontend
   type: NodePort
 ---
-apiVersion: apps/v1
+ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: odoo-shop
@@ -89,7 +89,7 @@ spec:
 selector:
     matchLabels:
       app: odoo-shop
-  template:
+   template:
     metadata:
       labels:
         app: odoo-shop
