@@ -41,7 +41,7 @@ spec:
         tier: backend
     spec:
       containers:
-      - image: postgres:12.0
+      - image: postgres:12
         name: odoo-db
         env:
         - name: POSTGRES_DB
