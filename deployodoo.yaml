@@ -1,4 +1,4 @@
-   ---
+ ---
 kind: Namespace
 apiVersion: v1
 metadata:
@@ -29,11 +29,11 @@ metadata:
   labels:
     app: odoo-shop
 spec:
- selector:
-    matchLabels:
-      app: odoo-shop
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: odoo-shop
   template:
     metadata:
       labels:
@@ -44,6 +44,8 @@ spec:
       - image: postgres:9.4
         name: odoo-db
         env:
+        - name: POSTGRES_DB
+          value: postgres
         - name: POSTGRES_USER
           value: odoo
         - name: POSTGRES_PASSWORD
@@ -84,11 +86,11 @@ metadata:
   labels:
     app: odoo-shop
 spec:
- selector:
-    matchLabels:
-      app: odoo-shop
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: odoo-shop
   template:
     metadata:
       labels:
@@ -97,8 +99,12 @@ spec:
     spec:
       containers:
         - image: assc2/imech:NET-$BUILD_NUMBER
-          name: odoo-shop
+          name: odoo
           env:
+          - name: POSTGRES_DB
+            value: postgres
+          - name: HOST
+            value: odoo-db
           - name: USER
             value: odoo
           - name: PASSWORD
