@@ -41,7 +41,7 @@ spec:
         tier: backend
     spec:
       containers:
-      - image: postgres:9.4
+      - image: postgres:15
         name: odoo-db
         env:
         - name: POSTGRES_DB
@@ -98,7 +98,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: assc2/imech:NET-$BUILD_NUMBER
+        - image: registry.cn-hangzhou.aliyuncs.com/zhengr/odoo:16.20230418
           name: odoo
           env:
           - name: POSTGRES_DB
