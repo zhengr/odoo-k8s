@@ -1,4 +1,3 @@
----
 kind: Namespace
 apiVersion: v1
 metadata:
@@ -12,12 +11,12 @@ metadata:
   name: odoo-db
   namespace: odoo
   labels:
-    app: odoo-shop
+    app: odoo-app
 spec:
   ports:
-    - port: 5432
+  - port: 5432
   selector:
-    app: odoo-shop
+    app: odoo-app
     tier: backend
   type: NodePort
 ---
@@ -27,17 +26,17 @@ metadata:
   name: odoo-db
   namespace: odoo
   labels:
-    app: odoo-shop
+    app: odoo-app
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: odoo-shop
+      app: odoo-app
   template:
     metadata:
       labels:
-        app: odoo-shop
+        app: odoo-app
         tier: backend
     spec:
       containers:
@@ -66,58 +65,58 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: odoo-shop
+  name: odoo-app
   namespace: odoo
   labels:
-    app: odoo-shop
+    app: odoo-app
 spec:
   ports:
-    - port: 8069
+  - port: 8069
   selector:
-    app: odoo-shop
+    app: odoo-app
     tier: frontend
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: odoo-shop
+  name: odoo-app
   namespace: odoo
   labels:
-    app: odoo-shop
+    app: odoo-app
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: odoo-shop
+      app: odoo-app
   template:
     metadata:
       labels:
-        app: odoo-shop
+        app: odoo-app
         tier: frontend
     spec:
       containers:
-        - image: registry.cn-hangzhou.aliyuncs.com/zhengr/odoo:16.20230418
+      - image: registry.cn-hangzhou.aliyuncs.com/zhengr/odoo:16.20230418
+        name: odoo
+        env:
+        - name: POSTGRES_DB
+          value: postgres
+        - name: HOST
+          value: odoo-db
+        - name: USER
+          value: odoo
+        - name: PASSWORD
+          value: password
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        ports:
+        - containerPort: 8069
           name: odoo
-          env:
-          - name: POSTGRES_DB
-            value: postgres
-          - name: HOST
-            value: odoo-db
-          - name: USER
-            value: odoo
-          - name: PASSWORD
-            value: password
-          securityContext:
-            privileged: true
-            runAsUser: 0
-          ports:
-            - containerPort: 8069
-              name: odoo
-          volumeMounts:
-          - name: odoo-pvc
-            mountPath: /var/lib/odoo
+        volumeMounts:
+        - name: odoo-pvc
+          mountPath: /var/lib/odoo
       volumes:
       - name: odoo-pvc
         persistentVolumeClaim:
